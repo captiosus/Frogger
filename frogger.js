@@ -13,3 +13,8 @@ var setupFrog = function(){
     requestId = window.requestAnimationFrame(drawFrog);
   };
 };
+
+
+var setupBackground = function(){
+  
+}
