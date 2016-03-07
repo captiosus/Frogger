@@ -7,69 +7,58 @@ var setupFrog = function(){
   var frog = new Image();
   frog.src = "images/frog.png";
 
-  var x = 178;
-  var y = 536;
+  var x = 180;
+  var y = 540;
 
   var keyW = false;
   var keyA = false;
   var keyS = false;
   var keyD = false;
 
-  function onKeyDown(event) {
-    var keyCode = event.keyCode;
-    switch (keyCode) {
-      case 68: //d
-        keyD = true;
-        break;
-      case 83: //s
-        keyS = true;
-        break;
-      case 65: //a
-        keyA = true;
-        break;
-      case 87: //w
-        keyW = true;
-        break;
-    }
-  }
-
   function onKeyUp(event) {
     var keyCode = event.keyCode;
 
-    switch (keyCode) {
-      case 68: //d
-        keyD = false;
+      switch(keyCode) {
+    case 68: //d
+	if (x < 360){
+            x+= 60;
+	}
         break;
-      case 83: //s
-        keyS = false;
-        break;
-      case 65: //a
-        keyA = false;
+    case 83: //s
+	if (y < 540){
+            y+=60;
+	}
+	break;
+    case 65: //a
+        if (x > 0){ 
+	    x-= 60;
+	}
         break;
       case 87: //w
-        keyW = false;
-        break;
+        if (y > 0){
+	    y-=60;
+	}
+	break;
     }
   }
 
-  window.addEventListener("keydown", onKeyDown, false);
   window.addEventListener("keyup", onKeyUp, false);
 
   var drawFrog = function(){
     ctx.clearRect(0, 0, 420, 600);
-    if (keyD === true) {
-      x++;
+    if (keyD === true && x < 360) {
+      x+=60;
     }
-    if (keyS === true) {
-      y++;
+    if (keyS === true && y < 540) {
+      y+= 60;
     }
-    if (keyA === true) {
-      x--;
+    if (keyA === true && x > 0) {
+      x -= 60;
     }
-    if (keyW === true) {
-      y--;
+    if (keyW === true && y > 0) {
+      y -= 60;
     }
-    ctx.drawImage(frog, x, y, 64, 64);
+    ctx.drawImage(frog, x, y, 60, 60);
     requestId = window.requestAnimationFrame(drawFrog);
   };
   drawFrog();
