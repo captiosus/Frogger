@@ -14,7 +14,7 @@ class Row {
     if(this.direction == 'left'){
       ent = new Entity( 400, this.y, 60, this.objectloc, 'left');
     }else{
-      ent = new Entity( 0, this.y, 60, this.objectloc, 'right');
+      ent = new Entity( 0, this.y, this.lengthofobjects, this.objectloc, 'right');
     }
     this.objects.push(ent);
   }
