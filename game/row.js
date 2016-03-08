@@ -10,8 +10,8 @@ class Row {
     this.direction = direction;
   }
   createObject(){
-    var ent
-    if(direction == 'left'){
+    var ent;
+    if(this.direction == 'left'){
       ent = new Entity( 400, this.y, 60, this.objectloc, 'left');
     }else{
       ent = new Entity( 0, this.y, 60, this.objectloc, 'right');
@@ -47,6 +47,6 @@ class Entity{
     return Math.max(this.x + this.length, this.x) * dirmod > x && x > Math.min(this.x, this.x + this.length);
   }
   drawObj(ctx){
-    ctx.drawImage(this.imageloc, thix.x, this.y);
+    ctx.drawImage(this.imageloc, this.x, this.y);
   }
 }

@@ -30,7 +30,7 @@ var setupFrog = function(){
 	}
 	break;
     case 65: //a
-        if (x > 0){ 
+        if (x > 0){
 	    x-= 60;
 	}
         break;
@@ -66,7 +66,7 @@ var setupFrog = function(){
 
 var setupBackground = function(){
 
-}
+};
 
 
 setupFrog();
