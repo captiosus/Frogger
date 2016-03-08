@@ -1,13 +1,14 @@
-var Row = class {
-  constructor(y, canwalk, period, lengthofobjects, direction){
+"use strict";
+class Row {
+  constructor(y, canwalk, period, lengthofobjects, direction, imagetype){
     this.y = y;
     this.canwalk = canwalk;
     this.period = period;
     this.lengthofobjects = lengthofobjects;
-    this.objectloc = '../images/car';
+    this.objectloc = '../images/' + imagetype;
     this.objects = [];
     this.direction = direction;
-  },
+  }
   createObject(){
     var ent
     if(direction == 'left'){
@@ -16,35 +17,35 @@ var Row = class {
       ent = new Entity( 0, this.y, 60, this.objectloc, 'right');
     }
     this.objects.push(ent);
-  },
+  }
   drawObjects(ctx){
     this.objects.forEach(function(obj){
       obj.drawObj(ctx);
     });
-  },
+  }
   isDead(x, y, length){
     for(var i in this.objects){
       if(this.objects[i].isOn(x) || this.objects[i].isOn(x + length)){
-        return true;
+        return this.canwalk;
       }
     }
-    return false;
+    return !this.canwalk;
   }
 }
 
-var Entity = class{
+class Entity{
   constructor(x, y, length, imageloc, direction){
     this.x = x;
     this.y = y;
     this.length = length;
     this.direction = direction;
     this.imageloc = imageloc + direction + '.jpg';
-  },
+  }
   isOn(x){
     var dirmod = -1;
     if (this.direction == "left") dirmod *= -1;
     return Math.max(this.x + this.length, this.x) * dirmod > x && x > Math.min(this.x, this.x + this.length);
-  },
+  }
   drawObj(ctx){
     ctx.drawImage(this.imageloc, thix.x, this.y);
   }
