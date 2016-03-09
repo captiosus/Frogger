@@ -52,7 +52,7 @@ var setupFrog = function(){
 		  if (obj.x >= 420) obj.x = 0 - row.lengthofobjects;
 	      }
 	  });
-      });			  
+      });		
       requestID = requestAnimationFrame(drawRows);
   }
 
@@ -86,7 +86,6 @@ var setupFrog = function(){
   window.addEventListener("keyup", onKeyUp, false);
 
   var drawFrog = function(){
-    ctx.clearRect(0, 0, 420, 600);
     ctx.drawImage(frog, x, y, 60, 60);
     requestId = window.requestAnimationFrame(drawFrog);
   };

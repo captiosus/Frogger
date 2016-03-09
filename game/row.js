@@ -42,7 +42,7 @@ var Entity = function(x, y, length, imageloc, direction){
   this.y = y;
   this.length = length;
   this.direction = direction;
-  this.imageloc = imageloc + direction + '.jpg';
+  this.imageloc = imageloc;
 };
 Entity.prototype.isOn = function(x){
   var dirmod = -1;
@@ -50,5 +50,6 @@ Entity.prototype.isOn = function(x){
   return Math.max(this.x + this.length, this.x) * dirmod > x && x > Math.min(this.x, this.x + this.length);
 };
 Entity.prototype.drawObj = function(ctx){
+  console.log(this.x);
   ctx.drawImage(this.imageloc, this.x, this.y,this.length,60);
 }
