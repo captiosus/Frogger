@@ -9,7 +9,6 @@ var setupFrog = function() {
 
   var rows = [];
   // rows.push(new Row(0,false, 6, 120, "left", "log", 40));
-  rows.push(new Row(30, false, 4, 120, "right", "log", 48));
   rows.push(new Row(60, false, 7, 120, "right", "log", 35));
   rows.push(new Row(90, false, 5, 120, "left", "log", 48));
   rows.push(new Row(120, false, 7, 120, "left", "log", 35));
@@ -33,11 +32,11 @@ var setupFrog = function() {
       } else {
         rows[i].objects[j].x -= j * distance;
       }
-
     }
   }
   var x = 180;
   var y = 540;
+
   var drawRows = function() {
     ctx.clearRect(0, 0, 420, 600);
     rows.forEach(function(row) {
@@ -45,12 +44,15 @@ var setupFrog = function() {
       row.objects.forEach(function(obj) {
         if (row.direction == "left") {
           obj.x -= row.velocity / 30;
-          if (obj.x <= 0 - row.lengthofobjects) {
+          if (obj.x <= 0 - (row.velocity * row.period) + row.lengthofobjects) {
             obj.x = 420;
           }
-        } else {
+        }
+        if (row.direction == "right") {
           obj.x += row.velocity / 30;
-          if (obj.x >= 420) obj.x = 0 - row.lengthofobjects;
+          if (obj.x >= 420 + (row.velocity * row.period) - row.lengthofobjects) {
+            obj.x = 0 - row.lengthofobjects;
+          }
         }
       });
     });
