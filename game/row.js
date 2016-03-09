@@ -7,7 +7,7 @@ var Row = function(y, canwalk, period, lengthofobjects, direction, imagetype, ve
   if (imagetype == "log"){
       this.objectloc.src = 'images/log.png';
   }
-  else { 
+  else {
       this.objectloc.src = 'images/' + imagetype + direction + ".png";
   }
   this.objects = [];
@@ -15,19 +15,19 @@ var Row = function(y, canwalk, period, lengthofobjects, direction, imagetype, ve
   this.velocity = velocity;
 };
 Row.prototype.createObject = function(){
-  var ent
+  var ent;
   if(this.direction == 'left'){
     ent = new Entity( 420, this.y, this.lengthofobjects, this.objectloc, 'left');
   }else{
     ent = new Entity( 0 - this.lengthofobjects, this.y, this.lengthofobjects, this.objectloc, 'right');
   }
   this.objects.push(ent);
-}
+};
 Row.prototype.drawObjects = function(ctx){
   this.objects.forEach(function(obj){
     obj.drawObj(ctx);
   });
-}
+};
 Row.prototype.isDead = function(x, y, length){
   for(var i in this.objects){
     if(this.objects[i].isOn(x) || this.objects[i].isOn(x + length)){
@@ -35,7 +35,7 @@ Row.prototype.isDead = function(x, y, length){
     }
   }
   return !this.canwalk;
-}
+};
 
 var Entity = function(x, y, length, imageloc, direction){
   this.x = x;
@@ -50,6 +50,5 @@ Entity.prototype.isOn = function(x){
   return Math.max(this.x + this.length, this.x) * dirmod > x && x > Math.min(this.x, this.x + this.length);
 };
 Entity.prototype.drawObj = function(ctx){
-  console.log(this.x);
-  ctx.drawImage(this.imageloc, this.x, this.y,this.length,60);
-}
+  ctx.drawImage(this.imageloc, this.x, this.y,this.length,30);
+};
