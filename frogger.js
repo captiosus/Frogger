@@ -6,14 +6,55 @@ var requestId;
 var setupFrog = function(){
   var frog = new Image();
   frog.src = "images/frog.png";
-
+  
+  var rows = [];
+  rows.push(new Row(0,false, 6, 120, "left", "log", 40));
+  rows.push(new Row(60, false, 4, 120, "right" , "log", 48));
+  rows.push(new Row(120, false, 7, 120, "right", "log",35));
+  rows.push(new Row(180, false, 5, 120, "left", "log",48));
+  rows.push(new Row(240, true, 4, 60, "right", "car",43));
+  rows.push(new Row(300, true, 6, 120, "right", "truck",50));
+  rows.push(new Row(360, true, 4, 60, "left", "car", 48));
+  rows.push(new Row(420, true, 5, 60, "right", "car", 42));
+  rows.push(new Row(480, true, 7, 120, "left", "truck", 45));
+  rows.push(new Row(540, true, 6, 60, "right", "car", 38));
+  var numObs;
+  var distance;
+  for (i = 0; i < rows.length; i++){
+      numObs = Math.ceil(420/rows[i].velocity/ rows[i].period);
+      distance = rows[i].velocity * rows[i].period;
+      for (j = 0; j < numObs; j++){
+	  rows[i].createObject();
+	  if (rows[i].direction == "left"){
+	      rows[i].objects[j].x += j * distance;
+	  }
+	  else {
+	      rows[i].objects[j].x -= j * distance;
+	  }
+	      
+      }
+  }
   var x = 180;
   var y = 540;
-
-  var keyW = false;
-  var keyA = false;
-  var keyS = false;
-  var keyD = false;
+  var drawRows = function(){
+      ctx.clearRect(0,0,420,600);
+      rows.forEach(function(row){
+	  row.drawObjects(ctx);
+	  row.objects.forEach(function(obj){
+	      if (row.direction == "left"){
+		  obj.x -= row.velocity/60;
+		  if (obj.x <= 0 - row.lengthofobjects){
+		      obj.x = 420;
+		  }
+	      }
+	      else {
+	      obj.x += row.velocity/60;
+		  if (obj.x >= 420) obj.x = 0 - row.lengthofobjects;
+	      }
+	  });
+      });			  
+      requestID = requestAnimationFrame(drawRows);
+  }
 
   function onKeyUp(event) {
     var keyCode = event.keyCode;
@@ -46,21 +87,10 @@ var setupFrog = function(){
 
   var drawFrog = function(){
     ctx.clearRect(0, 0, 420, 600);
-    if (keyD === true && x < 360) {
-      x+=60;
-    }
-    if (keyS === true && y < 540) {
-      y+= 60;
-    }
-    if (keyA === true && x > 0) {
-      x -= 60;
-    }
-    if (keyW === true && y > 0) {
-      y -= 60;
-    }
     ctx.drawImage(frog, x, y, 60, 60);
     requestId = window.requestAnimationFrame(drawFrog);
   };
+  drawRows();
   drawFrog();
 };
 
