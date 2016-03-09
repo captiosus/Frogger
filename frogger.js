@@ -9,8 +9,8 @@ var setupFrog = function(){
   
   var rows = [];
   rows.push(new Row(0,false, 6, 120, "left", "log", 40));
-  rows.push(new Row(60, false, 4, 120, "right" , "log", 48));
-  rows.push(new Row(120, false, 7, 120, "right", "log",35));
+  rows.push(new Row(60, false, 4, 120, "right" , "log", 52));
+  rows.push(new Row(120, false, 7, 120, "right", "log",30));
   rows.push(new Row(180, false, 5, 120, "left", "log",48));
   rows.push(new Row(240, true, 4, 60, "right", "car",43));
   rows.push(new Row(300, true, 6, 120, "right", "truck",50));
@@ -43,13 +43,15 @@ var setupFrog = function(){
 	  row.objects.forEach(function(obj){
 	      if (row.direction == "left"){
 		  obj.x -= row.velocity/60;
-		  if (obj.x <= 0 - row.lengthofobjects){
+		  if (obj.x <= 0 - (row.velocity * row.period) + row.lengthofobjects){
 		      obj.x = 420;
 		  }
 	      }
-	      else {
-	      obj.x += row.velocity/60;
-		  if (obj.x >= 420) obj.x = 0 - row.lengthofobjects;
+	      if (row.direction == "right") {
+		  obj.x += row.velocity/60;
+		  if (obj.x >= 420 + (row.velocity * row.period) - row.lengthofobjects){
+		      obj.x = 0 - row.lengthofobjects;
+		  }
 	      }
 	  });
       });		
@@ -62,7 +64,8 @@ var setupFrog = function(){
       switch(keyCode) {
     case 68: //d
 	if (x < 360){
-            x+= 60;
+	    frog.src = "images/frogright.png";
+            x+= 30;
 	}
         break;
     case 83: //s
@@ -72,11 +75,13 @@ var setupFrog = function(){
 	break;
     case 65: //a
         if (x > 0){
-	    x-= 60;
+	    frog.src = "images/frogleft.png";
+	    x-= 30;
 	}
         break;
       case 87: //w
         if (y > 0){
+	    frog.src = "images/frog.png";
 	    y-=60;
 	}
 	break;

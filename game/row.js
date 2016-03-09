@@ -50,6 +50,5 @@ Entity.prototype.isOn = function(x){
   return Math.max(this.x + this.length, this.x) * dirmod > x && x > Math.min(this.x, this.x + this.length);
 };
 Entity.prototype.drawObj = function(ctx){
-  console.log(this.x);
-  ctx.drawImage(this.imageloc, this.x, this.y,this.length,60);
+    ctx.drawImage(this.imageloc, this.x, this.y,this.length,60);
 }
