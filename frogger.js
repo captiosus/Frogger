@@ -1,27 +1,33 @@
 var canvas = document.getElementById("canvas");
 var ctx = canvas.getContext("2d");
-var requestId;
 var restart = document.getElementById("restart");
 
-var setupFrog = function() {
+var setupFrog = function(restarted) {
+  var requestId;
+  var rowId;
   var time = 0;
   var frog = new Image();
   frog.src = "images/frog.png";
   var alive = true;
   var rows = [];
+  restarted = false;
   var lives = 3;
+  var endgame = function() {
+    ctx.clearRect(0, 0, 420, 600);
+    cancelAnimationFrame(requestID);
+  };
   var rowSetup = function() {
     var directions = ["left", "right"];
     var randomNum;
     for (i = 0; i < 6; i++) {
       randomNum = Math.round(Math.random());
-      rows.push(new Row(60 + i * 30, false, Math.floor(Math.random() * 4 + 5), 120, directions[randomNum], "log", Math.floor(Math.random() * 40 + 40)));
+      rows.push(new Row(60 + i * 30, false, Math.floor(Math.random() * 3 + 4), 120, directions[randomNum], "log", Math.floor(Math.random() * 20 + 45)));
     }
     var size = [60, 120];
     var car = ["car", "truck"];
     for (i = 0; i < 8; i++) {
       randomNum = Math.round(Math.random());
-      rows.push(new Row(300 + i * 30, true, Math.floor(Math.random() * 3 + 5), size[randomNum], directions[Math.round(Math.random())], car[randomNum], Math.floor(Math.random() * 50 + 40)));
+      rows.push(new Row(300 + i * 30, true, Math.floor(Math.random() * 3 + 4), size[randomNum], directions[Math.round(Math.random())], car[randomNum], Math.floor(Math.random() * 30 + 60)));
     }
     var numObs;
     var distance;
@@ -92,37 +98,41 @@ var setupFrog = function() {
         }
       });
     });
-    requestID = requestAnimationFrame(drawRows);
+    if (!restarted || lives != -1) {
+      rowId = requestAnimationFrame(drawRows);
+    }
   };
 
   function onKeyUp(event) {
     var keyCode = event.keyCode;
-
-    switch (keyCode) {
-      case 68: //d
-        if (x < 360) {
-          x += 30;
-          frog.src = "images/frogright.png";
-        }
-        break;
-      case 83: //s
-        if (y < 570) {
-          y += 30;
-          frog.src = "images/frog.png";
-        }
-        break;
-      case 65: //a
-        if (x > 0) {
-          x -= 30;
-          frog.src = "images/frogleft.png";
-        }
-        break;
-      case 87: //w
-        if (y > 0) {
-          y -= 30;
-          frog.src = "images/frog.png";
-        }
-        break;
+    if (!restarted) {
+      switch (keyCode) {
+        case 68: //d
+          if (x < 360) {
+            x += 30;
+            frog.src = "images/frogright.png";
+          }
+          break;
+        case 83: //s
+          if (y < 570) {
+            y += 30;
+            frog.src = "images/frog.png";
+          }
+          break;
+        case 65: //a
+          if (x > 0) {
+            x -= 30;
+            frog.src = "images/frogleft.png";
+          }
+          break;
+        case 87: //w
+          if (y > 0) {
+            y -= 30;
+            console.log(y);
+            frog.src = "images/frog.png";
+          }
+          break;
+      }
     }
   }
   var resetGame = function() {
@@ -141,29 +151,52 @@ var setupFrog = function() {
     ctx.fillText("Time: " + Math.round(time), 320, 30);
     ctx.drawImage(frog, x, y, 30, 30);
     time += 1 / 60;
-    requestId = window.requestAnimationFrame(drawFrog);
     if (!alive) {
       resetGame();
     }
     if (lives === 0) {
-      cancelAnimationFrame(requestID);
+      cancelAnimationFrame(requestId);
+      cancelAnimationFrame(rowId);
       window.removeEventListener("keyup", onKeyUp);
       lives = -1;
       ctx.clearRect(0, 0, 420, 600);
-      ctx.fillText("You Lost!", 0, 0);
+      ctx.fillText("You Lost!", 160, 30);
+      ctx.fillText("Press Restart to Play Again", 100, 60);
+      console.log("hello");
       return;
     }
     if (y == 30) {
-      alert("you won in " + Math.round(time) + " seconds!");
       y = 50;
-      endgame();
+      cancelAnimationFrame(requestId);
+      cancelAnimationFrame(rowId);
       window.removeEventListener("keyup", onKeyUp);
-      ctx.fillText("You Won in" + Math.round(time) + " Seconds!", 0, 0);
+      ctx.clearRect(0, 0, 420, 600);
+      ctx.fillText("You Won in " + Math.round(time) + " Seconds!", 80, 30);
+      ctx.fillText("Press Restart to Play Again", 100, 60);
       return;
     }
+    if (restarted || lives == -1) {
+      window.removeEventListener("keyup", onKeyUp);
+      x = 180;
+      y = 570;
+      return;
+    }
+    if (!restarted || lives != -1) {
+      requestId = window.requestAnimationFrame(drawFrog);
+    }
+
   };
+
+  restart.addEventListener("mousedown", function(e) {
+    ctx.clearRect(0, 0, 420, 600);
+    restarted = true;
+    cancelAnimationFrame(requestId);
+    cancelAnimationFrame(rowId);
+    setupFrog(false);
+  });
   drawRows();
   drawFrog();
+  return;
 };
 
 var setupBackground = function() {
@@ -173,14 +206,6 @@ var setupBackground = function() {
   ctx.fillRect(0, 240, 420, 60);
 };
 
-var endgame = function() {
-  ctx.clearRect(0, 0, 420, 600);
-  cancelAnimationFrame(requestID);
-};
 
-restart.addEventListener("mousedown", function(e) {
-  cancelAnimationFrame(requestID);
-  ctx.clearRect(0, 0, 420, 600);
-  setupFrog();
-});
-setupFrog();
+
+setupFrog(false);
