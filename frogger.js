@@ -11,18 +11,17 @@ var setupFrog = function() {
   var rows = [];
   var lives = 3;
   var rowSetup = function() {
-    var directions = ["left", "right"]
-    var randomNum; 
-    for (i = 0; i < 6; i++){
-	randomNum = Math.round(Math.random());
-	rows.push(new Row(60 + i * 30, false,Math.floor( Math.random() * 4 + 5), 120, directions[randomNum], "log",Math.floor(Math.random()*40 + 40)));
+    var directions = ["left", "right"];
+    var randomNum;
+    for (i = 0; i < 6; i++) {
+      randomNum = Math.round(Math.random());
+      rows.push(new Row(60 + i * 30, false, Math.floor(Math.random() * 4 + 5), 120, directions[randomNum], "log", Math.floor(Math.random() * 40 + 40)));
     }
-    var size = [60,120];
-    var car = ["car","truck"];
-    for (i = 0; i < 8; i++){
-	randomNum = Math.round(Math.random());
-	console.log(randomNum);
-	rows.push(new Row(300 + i * 30, true, Math.floor( Math.random() * 3 + 5), size[randomNum], directions[Math.round(Math.random())], car[randomNum], Math.floor(Math.random()*50 + 40)));
+    var size = [60, 120];
+    var car = ["car", "truck"];
+    for (i = 0; i < 8; i++) {
+      randomNum = Math.round(Math.random());
+      rows.push(new Row(300 + i * 30, true, Math.floor(Math.random() * 3 + 5), size[randomNum], directions[Math.round(Math.random())], car[randomNum], Math.floor(Math.random() * 50 + 40)));
     }
     var numObs;
     var distance;
@@ -45,6 +44,7 @@ var setupFrog = function() {
 
   var drawRows = function() {
     ctx.clearRect(0, 0, 420, 600);
+    setupBackground();
     rows.forEach(function(row) {
       row.color(ctx);
       var confirmed = false;
@@ -80,13 +80,11 @@ var setupFrog = function() {
                 if (x > 420) {
                   alive = false;
                 }
-              }
-              else {
+              } else {
                 alive = false;
               }
             }
-          }
-          else {
+          } else {
             if (obj.isOn(x)) {
               alive = false;
             }
@@ -139,20 +137,20 @@ var setupFrog = function() {
   var drawFrog = function() {
     ctx.font = "20px Times New Roman";
     ctx.fillStyle = "black";
-    ctx.fillText("Lives: " + lives,20, 30);
-    ctx.fillText("Time: " + Math.round(time), 320,30);
+    ctx.fillText("Lives: " + lives, 20, 30);
+    ctx.fillText("Time: " + Math.round(time), 320, 30);
     ctx.drawImage(frog, x, y, 30, 30);
-    time += 1/60;
+    time += 1 / 60;
     requestId = window.requestAnimationFrame(drawFrog);
     if (!alive) {
       resetGame();
     }
-    if (lives == 0) {
-      alert("you lost!");
+    if (lives === 0) {
       cancelAnimationFrame(requestID);
       window.removeEventListener("keyup", onKeyUp);
       lives = -1;
       ctx.clearRect(0, 0, 420, 600);
+      ctx.fillText("You Lost!", 0, 0);
       return;
     }
     if (y == 30) {
@@ -160,6 +158,7 @@ var setupFrog = function() {
       y = 50;
       endgame();
       window.removeEventListener("keyup", onKeyUp);
+      ctx.fillText("You Won in" + Math.round(time) + " Seconds!", 0, 0);
       return;
     }
   };
@@ -168,7 +167,10 @@ var setupFrog = function() {
 };
 
 var setupBackground = function() {
-
+  ctx.fillStyle = "#7CFC00";
+  ctx.fillRect(0, 0, 420, 60);
+  ctx.fillRect(0, 540, 420, 60);
+  ctx.fillRect(0, 240, 420, 60);
 };
 
 var endgame = function() {
