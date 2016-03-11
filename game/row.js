@@ -40,6 +40,16 @@ Row.prototype.isDead = function(x, y, length){
 Row.prototype.color = function(ctx){
     ctx.fillStyle = "#afaea7";
     ctx.fillRect(0,this.y,420,30);
+    ctx.fillStyle = "black";
+    for (y = 30; y < 60; y+=10){
+	for(x = 0; x < 420; x+=20){
+	    if (y == 40 && x == 0){
+		x += 10;
+	    }
+	    
+	    ctx.fillRect(x,y,10,10);
+	}
+    }
     if (this.canwalk){
 	ctx.fillStyle = "#e5bb14";
 	ctx.fillRect(0,this.y-2.5,420,5);

@@ -3,12 +3,13 @@ var ctx = canvas.getContext("2d");
 var requestId;
 var restart = document.getElementById("restart");
 
-var setupFrog = function() {
+var setupFrog = function(restarted) {
   var time = 0;
   var frog = new Image();
   frog.src = "images/frog.png";
   var alive = true;
   var rows = [];
+  restarted = false;
   var lives = 3;
   var rowSetup = function() {
     var directions = ["left", "right"]
@@ -16,13 +17,14 @@ var setupFrog = function() {
     for (i = 0; i < 6; i++){
 	randomNum = Math.round(Math.random());
 	rows.push(new Row(60 + i * 30, false,Math.floor( Math.random() * 4 + 5), 120, directions[randomNum], "log",Math.floor(Math.random()*40 + 40)));
+	console.log(rows[i].velocity + " " +rows[i].period);
     }
     var size = [60,120];
     var car = ["car","truck"];
     for (i = 0; i < 8; i++){
 	randomNum = Math.round(Math.random());
-	console.log(randomNum);
-	rows.push(new Row(300 + i * 30, true, Math.floor( Math.random() * 3 + 5), size[randomNum], directions[Math.round(Math.random())], car[randomNum], Math.floor(Math.random()*50 + 40)));
+	rows.push(new Row(300 + i * 30, true, Math.floor( Math.random() * 3 + 4), size[randomNum], directions[Math.round(Math.random())], car[randomNum], Math.floor(Math.random()*50 + 40)));
+	console.log(rows[i+6].velocity + " " + rows[i+6].period);
     }
     var numObs;
     var distance;
@@ -139,11 +141,10 @@ var setupFrog = function() {
   var drawFrog = function() {
     ctx.font = "20px Times New Roman";
     ctx.fillStyle = "black";
-    ctx.fillText("Lives: " + lives,20, 30);
-    ctx.fillText("Time: " + Math.round(time), 320,30);
+    ctx.fillText("Lives: " + lives,20, 25);
+    ctx.fillText("Time: " + Math.round(time), 320,25);
     ctx.drawImage(frog, x, y, 30, 30);
     time += 1/60;
-    requestId = window.requestAnimationFrame(drawFrog);
     if (!alive) {
       resetGame();
     }
@@ -159,26 +160,32 @@ var setupFrog = function() {
       alert("you won in " + Math.round(time) + " seconds!");
       y = 50;
       endgame();
-      window.removeEventListener("keyup", onKeyUp);
+      window.removeEventListener("keyup", onKeyUp);      
       return;
     }
+    if (restarted){
+	window.removeEventListener("keyup", onKeyUp);
+	x = 180;
+	y = 570;
+    }
+    requestId = window.requestAnimationFrame(drawFrog);
+
   };
+  restart.addEventListener("mousedown", function(e) {
+      cancelAnimationFrame(requestID);
+      ctx.clearRect(0, 0, 420, 600);
+      restarted = true;
+      setupFrog(false);
+  });
   drawRows();
   drawFrog();
 };
 
-var setupBackground = function() {
-
-};
 
 var endgame = function() {
   ctx.clearRect(0, 0, 420, 600);
   cancelAnimationFrame(requestID);
 };
 
-restart.addEventListener("mousedown", function(e) {
-  cancelAnimationFrame(requestID);
-  ctx.clearRect(0, 0, 420, 600);
-  setupFrog();
-});
-setupFrog();
+
+setupFrog(false);
