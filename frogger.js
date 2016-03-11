@@ -57,13 +57,13 @@ var setupFrog = function(restarted) {
       row.drawObjects(ctx);
       row.objects.forEach(function(obj) {
         if (row.direction == "left") {
-          obj.x -= row.velocity / 30;
+          obj.x -= row.velocity / 60;
           if (obj.x <= 0 - (row.velocity * row.period) + row.lengthofobjects) {
             obj.x = 420;
           }
         }
         if (row.direction == "right") {
-          obj.x += row.velocity / 30;
+          obj.x += row.velocity / 60;
           if (obj.x >= 420 + (row.velocity * row.period) - row.lengthofobjects) {
             obj.x = 0 - row.lengthofobjects;
           }
@@ -73,10 +73,10 @@ var setupFrog = function(restarted) {
             if (!confirmed) {
               if (obj.isOn(x)) {
                 if (row.direction == "right") {
-                  x += row.velocity / 30;
+                  x += row.velocity / 60;
                 }
                 if (row.direction == "left") {
-                  x -= row.velocity / 30;
+                  x -= row.velocity / 60;
                 }
                 alive = true;
                 confirmed = true;
