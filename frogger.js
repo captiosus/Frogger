@@ -101,32 +101,34 @@ var setupFrog = function(restarted) {
 
   function onKeyUp(event) {
     var keyCode = event.keyCode;
-
-    switch (keyCode) {
-      case 68: //d
-        if (x < 360) {
-          x += 30;
-          frog.src = "images/frogright.png";
-        }
-        break;
-      case 83: //s
-        if (y < 570) {
-          y += 30;
-          frog.src = "images/frog.png";
-        }
-        break;
-      case 65: //a
-        if (x > 0) {
-          x -= 30;
-          frog.src = "images/frogleft.png";
-        }
-        break;
+    if (!restarted){
+	switch (keyCode) {
+	case 68: //d
+            if (x < 360) {
+		x += 30;
+		frog.src = "images/frogright.png";
+            }
+            break;
+	case 83: //s
+            if (y < 570) {
+		y += 30;
+		frog.src = "images/frog.png";
+            }
+            break;
+	case 65: //a
+            if (x > 0) {
+		x -= 30;
+		frog.src = "images/frogleft.png";
+            }
+            break;
       case 87: //w
-        if (y > 0) {
-          y -= 30;
-          frog.src = "images/frog.png";
-        }
-        break;
+            if (y > 0) {
+		y -= 30;
+		console.log(y);
+		frog.src = "images/frog.png";
+            }
+            break;
+	}
     }
   }
   var resetGame = function() {
@@ -163,10 +165,11 @@ var setupFrog = function(restarted) {
       window.removeEventListener("keyup", onKeyUp);      
       return;
     }
-    if (restarted){
+    if (restarted || lives == -1){
 	window.removeEventListener("keyup", onKeyUp);
 	x = 180;
 	y = 570;
+	return;
     }
     requestId = window.requestAnimationFrame(drawFrog);
 
@@ -179,6 +182,7 @@ var setupFrog = function(restarted) {
   });
   drawRows();
   drawFrog();
+  return;
 };
 
 
