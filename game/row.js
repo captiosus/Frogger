@@ -64,10 +64,6 @@ var Entity = function(x, y, length, imageloc, direction){
 };
 Entity.prototype.isOn = function(x){
   return (x+15 >= this.x && x+15 <=this.x + this.length);
-  /*
-  var dirmod = -1;
-  if (this.direction == "left") dirmod *= -1;
-  return Math.max(this.x + this.length, this.x) * dirmod > x && x > Math.min(this.x, this.x + this.length);*/
 };
 Entity.prototype.drawObj = function(ctx){
   ctx.drawImage(this.imageloc, this.x, this.y,this.length,30);

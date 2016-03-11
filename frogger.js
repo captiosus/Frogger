@@ -4,11 +4,12 @@ var requestId;
 var restart = document.getElementById("restart");
 
 var setupFrog = function() {
+  var time = 0;
   var frog = new Image();
   frog.src = "images/frog.png";
   var alive = true;
   var rows = [];
-  var lives = 2;
+  var lives = 3;
   var rowSetup = function() {
     var directions = ["left", "right"]
     var randomNum; 
@@ -23,19 +24,6 @@ var setupFrog = function() {
 	console.log(randomNum);
 	rows.push(new Row(300 + i * 30, true, Math.floor( Math.random() * 3 + 5), size[randomNum], directions[Math.round(Math.random())], car[randomNum], Math.floor(Math.random()*50 + 40)));
     }
-   /* rows.push(new Row(90, false, 5, 120, "left", "log", 48));
-    rows.push(new Row(120, false, 7, 120, "right", "log", 35));
-    rows.push(new Row(150, false, 7, 120, "left", "log", 42));
-    rows.push(new Row(180, false, 5, 120, "right", "log", 46));
-    rows.push(new Row(210, false, 8, 120, "left", "log", 35));
-    rows.push(new Row(300, true, 4, 60, "right", "car", 43));
-    rows.push(new Row(330, true, 6, 120, "right", "truck", 50));
-    rows.push(new Row(360, true, 4, 60, "left", "car", 48));
-    rows.push(new Row(390, true, 5, 60, "left", "car", 41));
-    rows.push(new Row(420, true, 5, 60, "right", "car", 42));
-    rows.push(new Row(450, true, 7, 120, "left", "truck", 45));
-    rows.push(new Row(480, true, 6, 60, "left", "car", 43));
-    rows.push(new Row(510, true, 5, 120, "left", "truck", 48));*/
     var numObs;
     var distance;
     for (i = 0; i < rows.length; i++) {
@@ -149,21 +137,26 @@ var setupFrog = function() {
   window.addEventListener("keyup", onKeyUp, false);
 
   var drawFrog = function() {
+    ctx.font = "20px Times New Roman";
+    ctx.fillStyle = "black";
+    ctx.fillText("Lives: " + lives,20, 30);
+    ctx.fillText("Time: " + Math.round(time), 320,30);
     ctx.drawImage(frog, x, y, 30, 30);
+    time += 1/60;
     requestId = window.requestAnimationFrame(drawFrog);
     if (!alive) {
       resetGame();
     }
-    if (lives < 0) {
+    if (lives == 0) {
       alert("you lost!");
       cancelAnimationFrame(requestID);
       window.removeEventListener("keyup", onKeyUp);
-      lives = 1;
+      lives = -1;
       ctx.clearRect(0, 0, 420, 600);
       return;
     }
     if (y == 30) {
-      alert("you won!");
+      alert("you won in " + Math.round(time) + " seconds!");
       y = 50;
       endgame();
       window.removeEventListener("keyup", onKeyUp);
