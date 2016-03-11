@@ -1,9 +1,9 @@
 var canvas = document.getElementById("canvas");
 var ctx = canvas.getContext("2d");
-var requestId;
 var restart = document.getElementById("restart");
 
 var setupFrog = function(restarted) {
+  var requestId;
   var time = 0;
   var frog = new Image();
   frog.src = "images/frog.png";
@@ -11,19 +11,23 @@ var setupFrog = function(restarted) {
   var rows = [];
   restarted = false;
   var lives = 3;
+  var endgame = function() {
+      ctx.clearRect(0, 0, 420, 600);
+      cancelAnimationFrame(requestID);
+  };
   var rowSetup = function() {
     var directions = ["left", "right"]
     var randomNum; 
     for (i = 0; i < 6; i++){
 	randomNum = Math.round(Math.random());
-	rows.push(new Row(60 + i * 30, false,Math.floor( Math.random() * 4 + 5), 120, directions[randomNum], "log",Math.floor(Math.random()*40 + 40)));
+	rows.push(new Row(60 + i * 30, false,Math.floor( Math.random() * 3 + 4), 120, directions[randomNum], "log",Math.floor(Math.random()*20 + 45)));
 	console.log(rows[i].velocity + " " +rows[i].period);
     }
     var size = [60,120];
     var car = ["car","truck"];
     for (i = 0; i < 8; i++){
 	randomNum = Math.round(Math.random());
-	rows.push(new Row(300 + i * 30, true, Math.floor( Math.random() * 3 + 4), size[randomNum], directions[Math.round(Math.random())], car[randomNum], Math.floor(Math.random()*50 + 40)));
+	rows.push(new Row(300 + i * 30, true, Math.floor( Math.random() * 3 + 4), size[randomNum], directions[Math.round(Math.random())], car[randomNum], Math.floor(Math.random()*30 + 60)));
 	console.log(rows[i+6].velocity + " " + rows[i+6].period);
     }
     var numObs;
@@ -96,7 +100,9 @@ var setupFrog = function(restarted) {
         }
       });
     });
-    requestID = requestAnimationFrame(drawRows);
+    if(!restarted || !lives== -1){
+	requestId = requestAnimationFrame(drawRows);
+    }
   };
 
   function onKeyUp(event) {
@@ -152,7 +158,7 @@ var setupFrog = function(restarted) {
     }
     if (lives == 0) {
       alert("you lost!");
-      cancelAnimationFrame(requestID);
+      cancelAnimationFrame(requestId);
       window.removeEventListener("keyup", onKeyUp);
       lives = -1;
       ctx.clearRect(0, 0, 420, 600);
@@ -171,13 +177,16 @@ var setupFrog = function(restarted) {
 	y = 570;
 	return;
     }
-    requestId = window.requestAnimationFrame(drawFrog);
+    if(!restarted || !lives== -1){
+	requestId = window.requestAnimationFrame(drawFrog);
+    }
 
   };
+   
   restart.addEventListener("mousedown", function(e) {
-      cancelAnimationFrame(requestID);
       ctx.clearRect(0, 0, 420, 600);
       restarted = true;
+      cancelAnimationFrame(requestId);
       setupFrog(false);
   });
   drawRows();
@@ -186,10 +195,7 @@ var setupFrog = function(restarted) {
 };
 
 
-var endgame = function() {
-  ctx.clearRect(0, 0, 420, 600);
-  cancelAnimationFrame(requestID);
-};
+
 
 
 setupFrog(false);
