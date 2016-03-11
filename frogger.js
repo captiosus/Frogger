@@ -20,14 +20,14 @@ var setupFrog = function(restarted) {
     var randomNum; 
     for (i = 0; i < 6; i++){
 	randomNum = Math.round(Math.random());
-	rows.push(new Row(60 + i * 30, false,Math.floor( Math.random() * 3 + 4), 120, directions[randomNum], "log",Math.floor(Math.random()*20 + 45)));
+	rows.push(new Row(60 + i * 30, false,Math.floor( Math.random() * 3 + 4), 120, directions[randomNum], "log",Math.floor(Math.random()*30 + 80)));
 	console.log(rows[i].velocity + " " +rows[i].period);
     }
     var size = [60,120];
     var car = ["car","truck"];
     for (i = 0; i < 8; i++){
 	randomNum = Math.round(Math.random());
-	rows.push(new Row(300 + i * 30, true, Math.floor( Math.random() * 3 + 4), size[randomNum], directions[Math.round(Math.random())], car[randomNum], Math.floor(Math.random()*30 + 60)));
+	rows.push(new Row(300 + i * 30, true, Math.floor( Math.random() * 3 + 4), size[randomNum], directions[Math.round(Math.random())], car[randomNum], Math.floor(Math.random()*40 + 90)));
 	console.log(rows[i+6].velocity + " " + rows[i+6].period);
     }
     var numObs;
@@ -57,13 +57,13 @@ var setupFrog = function(restarted) {
       row.drawObjects(ctx);
       row.objects.forEach(function(obj) {
         if (row.direction == "left") {
-          obj.x -= row.velocity / 30;
+          obj.x -= row.velocity / 60;
           if (obj.x <= 0 - (row.velocity * row.period) + row.lengthofobjects) {
             obj.x = 420;
           }
         }
         if (row.direction == "right") {
-          obj.x += row.velocity / 30;
+          obj.x += row.velocity / 60;
           if (obj.x >= 420 + (row.velocity * row.period) - row.lengthofobjects) {
             obj.x = 0 - row.lengthofobjects;
           }
@@ -73,10 +73,10 @@ var setupFrog = function(restarted) {
             if (!confirmed) {
               if (obj.isOn(x)) {
                 if (row.direction == "right") {
-                  x += row.velocity / 30;
+                  x += row.velocity / 60;
                 }
                 if (row.direction == "left") {
-                  x -= row.velocity / 30;
+                  x -= row.velocity / 60;
                 }
                 alive = true;
                 confirmed = true;
