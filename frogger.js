@@ -10,12 +10,24 @@ var setupFrog = function() {
   var rows = [];
   var lives = 2;
   var rowSetup = function() {
-    rows.push(new Row(60, false, 7, 120, "right", "log", 35));
-    rows.push(new Row(90, false, 5, 120, "left", "log", 48));
-    rows.push(new Row(120, false, 7, 120, "left", "log", 35));
+    var directions = ["left", "right"]
+    var randomNum; 
+    for (i = 0; i < 6; i++){
+	randomNum = Math.round(Math.random());
+	rows.push(new Row(60 + i * 30, false,Math.floor( Math.random() * 4 + 5), 120, directions[randomNum], "log",Math.floor(Math.random()*40 + 40)));
+    }
+    var size = [60,120];
+    var car = ["car","truck"];
+    for (i = 0; i < 8; i++){
+	randomNum = Math.round(Math.random());
+	console.log(randomNum);
+	rows.push(new Row(300 + i * 30, true, Math.floor( Math.random() * 3 + 5), size[randomNum], directions[Math.round(Math.random())], car[randomNum], Math.floor(Math.random()*50 + 40)));
+    }
+   /* rows.push(new Row(90, false, 5, 120, "left", "log", 48));
+    rows.push(new Row(120, false, 7, 120, "right", "log", 35));
     rows.push(new Row(150, false, 7, 120, "left", "log", 42));
     rows.push(new Row(180, false, 5, 120, "right", "log", 46));
-    rows.push(new Row(210, false, 5, 120, "left", "log", 35));
+    rows.push(new Row(210, false, 8, 120, "left", "log", 35));
     rows.push(new Row(300, true, 4, 60, "right", "car", 43));
     rows.push(new Row(330, true, 6, 120, "right", "truck", 50));
     rows.push(new Row(360, true, 4, 60, "left", "car", 48));
@@ -23,7 +35,7 @@ var setupFrog = function() {
     rows.push(new Row(420, true, 5, 60, "right", "car", 42));
     rows.push(new Row(450, true, 7, 120, "left", "truck", 45));
     rows.push(new Row(480, true, 6, 60, "left", "car", 43));
-    rows.push(new Row(510, true, 5, 120, "left", "truck", 48));
+    rows.push(new Row(510, true, 5, 120, "left", "truck", 48));*/
     var numObs;
     var distance;
     for (i = 0; i < rows.length; i++) {
@@ -46,6 +58,7 @@ var setupFrog = function() {
   var drawRows = function() {
     ctx.clearRect(0, 0, 420, 600);
     rows.forEach(function(row) {
+      row.color(ctx);
       var confirmed = false;
       row.drawObjects(ctx);
       row.objects.forEach(function(obj) {
@@ -146,10 +159,15 @@ var setupFrog = function() {
       cancelAnimationFrame(requestID);
       window.removeEventListener("keyup", onKeyUp);
       lives = 1;
+      ctx.clearRect(0, 0, 420, 600);
+      return;
     }
-    if (y < 60) {
+    if (y == 30) {
       alert("you won!");
+      y = 50;
       endgame();
+      window.removeEventListener("keyup", onKeyUp);
+      return;
     }
   };
   drawRows();
