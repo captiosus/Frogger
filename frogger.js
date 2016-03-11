@@ -147,8 +147,8 @@ var setupFrog = function(restarted) {
   var drawFrog = function() {
     ctx.font = "20px Times New Roman";
     ctx.fillStyle = "black";
-    ctx.fillText("Lives: " + lives, 20, 30);
-    ctx.fillText("Time: " + Math.round(time), 320, 30);
+    ctx.fillText("Lives: " + lives, 20, 25);
+    ctx.fillText("Time: " + Math.round(time), 320, 25);
     ctx.drawImage(frog, x, y, 30, 30);
     time += 1 / 60;
     if (!alive) {
